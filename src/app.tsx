@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'preact/hooks';
+import { LanguageContext, type Language } from './lib/i18n';
 import { ExplainPref } from './components/Explain';
 import { Home } from './components/Home';
 import { ModePick } from './components/ModePick';
@@ -33,6 +34,8 @@ export function App() {
   useEffect(() => {
     save(saved);
     setSound(saved.sound);
+    document.documentElement.lang = saved.language ?? 'en';
+    document.title = saved.language === 'zh-CN' ? '兔兔数学 · Bunny Math' : 'Bunny Math';
   }, [saved]);
 
   const update = (patch: Partial<Saved>) => setSaved((s) => ({ ...s, ...patch }));
@@ -111,5 +114,5 @@ export function App() {
     }
   })();
 
-  return <ExplainPref.Provider value={{ style: saved.explain, setStyle: (explain) => update({ explain }) }}>{body}</ExplainPref.Provider>;
+  return <LanguageContext.Provider value={{ language: saved.language ?? 'en', setLanguage: (language: Language) => update({ language }) }}><ExplainPref.Provider value={{ style: saved.explain, setStyle: (explain) => update({ explain }) }}>{body}</ExplainPref.Provider></LanguageContext.Provider>;
 }

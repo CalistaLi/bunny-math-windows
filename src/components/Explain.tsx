@@ -4,6 +4,7 @@ import { explain, questionText, type Group, type Piece, type Scene } from '../li
 import { sounds } from '../lib/sound';
 import type { ExplainStyle } from '../lib/storage';
 import type { Question } from '../lib/types';
+import { useI18n } from '../lib/i18n';
 
 /** The child's chosen explanation style, remembered by the app. */
 export const ExplainPref = createContext<{ style: ExplainStyle; setStyle: (s: ExplainStyle) => void }>({
@@ -101,6 +102,7 @@ function ColumnView({ scene }: { scene: Extract<Scene, { type: 'column' }> }) {
 }
 
 function Stage({ scene }: { scene: Scene }) {
+  const { t } = useI18n();
   if (scene.type === 'array') return <ArrayView scene={scene} />;
   if (scene.type === 'column') return <ColumnView scene={scene} />;
   if (scene.type === 'text') {
@@ -110,7 +112,7 @@ function Stage({ scene }: { scene: Scene }) {
           {scene.lines.map((l, i) => (
             <Fragment key={i}>
               {i > 0 && <span class="arrow">⬇</span>}
-              <span>{l.replace(/-/g, '−')}</span>
+              <span>{t(l).replace(/-/g, '−')}</span>
             </Fragment>
           ))}
         </div>
@@ -140,6 +142,7 @@ function Stage({ scene }: { scene: Scene }) {
 }
 
 export function ExplainSheet({ question, onClose }: { question: Question; onClose: () => void }) {
+  const { t } = useI18n();
   const { style, setStyle } = useContext(ExplainPref);
   const steps = useMemo(() => explain(question, style), [question, style]);
   const [cur, setCur] = useState(0);
@@ -165,10 +168,10 @@ export function ExplainSheet({ question, onClose }: { question: Question; onClos
 
   return (
     <div class="scrim" onClick={(e) => e.target === e.currentTarget && onClose()}>
-      <div class="sheet" role="dialog" aria-modal="true" aria-label={`How to solve ${questionText(question)}`}>
+      <div class="sheet" role="dialog" aria-modal="true" aria-label={t(`How to solve ${questionText(question)}`)}>
         <div class="sheet-head">
           <p class="sheet-title">{questionText(question).replace(/-/g, '−')}</p>
-          <div class="seg style-pick" role="radiogroup" aria-label="Show it with">
+          <div class="seg style-pick" role="radiogroup" aria-label={t('Show it with')}>
             {STYLES.map((s) => (
               <button
                 key={s.id}
@@ -179,29 +182,29 @@ export function ExplainSheet({ question, onClose }: { question: Question; onClos
                   setStyle(s.id);
                 }}
               >
-                {s.label}
+                {t(s.label)}
               </button>
             ))}
           </div>
-          <button class="puffy icon-btn" aria-label="Close" onClick={onClose}>
+          <button class="puffy icon-btn" aria-label={t('Close')} onClick={onClose}>
             ✕
           </button>
         </div>
         <Stage key={`${style}-${cur}`} scene={steps[Math.min(cur, steps.length - 1)].scene} />
         <p class="caption" aria-live="polite">
-          <Highlight text={steps[Math.min(cur, steps.length - 1)].caption} />
+          <Highlight text={t(steps[Math.min(cur, steps.length - 1)].caption)} />
         </p>
         <div class="sheet-foot">
-          <div class="steps" aria-label={`Step ${cur + 1} of ${steps.length}`}>
+          <div class="steps" aria-label={t(`Step ${cur + 1} of ${steps.length}`)}>
             {steps.map((_, i) => (
               <span key={i} class={i === cur ? 'on' : ''} />
             ))}
           </div>
           <button class="puffy" style={{ visibility: cur ? 'visible' : 'hidden' }} onClick={() => go(-1)}>
-            ◀ Back
+            {t('◀ Back')}
           </button>
           <button class="puffy berry" onClick={() => go(1)}>
-            {last ? 'Got it!' : 'Next ▶'}
+            {t(last ? 'Got it!' : 'Next ▶')}
           </button>
         </div>
       </div>

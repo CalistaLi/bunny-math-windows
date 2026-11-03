@@ -1,10 +1,12 @@
 import type { LevelId, Mode } from './types';
+import type { Language } from './i18n';
 
 /** How "Show me how" explains a sum: base-ten blocks, or the column method (竖式). */
 export type ExplainStyle = 'blocks' | 'column';
 
 /** Everything the app remembers on this device. No accounts, nothing leaves the browser. */
 export type Saved = {
+  language?: Language;
   /** Unset until the child picks a mode for the first time. */
   mode?: Mode;
   /** The level picked in each mode. */

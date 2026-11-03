@@ -1,0 +1,22 @@
+appId: local.bunnymath.desktop
+productName: Bunny Math
+copyright: Bunny Math contributors
+directories:
+  output: release
+files:
+  - dist/**/*
+  - desktop/main.cjs
+  - desktop/icon.png
+  - desktop/README.zh-CN.md
+  - package.json
+asar: true
+npmRebuild: false
+electronDist: node_modules/electron/dist
+win:
+  icon: desktop/icon.ico
+  target:
+    - target: portable
+      arch: [x64]
+  signExecutable: false
+portable:
+  artifactName: Bunny-Math-${version}-Windows-${arch}.exe

@@ -1,3 +1,14 @@
+/* Language switch shares the original button style. */
+.language-btn { padding: 8px 14px; font-size: 17px; font-weight: 800; flex-shrink: 0; }
+.mode-language { position: absolute; top: 16px; right: 18px; z-index: 1; }
+html:lang(zh-CN) {
+  --display: "Mochiy Pop One", "Baloo 2", "Microsoft YaHei", "PingFang SC", sans-serif;
+  --body: "Baloo 2", "Microsoft YaHei", "PingFang SC", sans-serif;
+}
+html:lang(zh-CN) .bubble { font-size: 17px; }
+html:lang(zh-CN) .caption { line-height: 1.65; }
+@media (max-width: 560px) { .language-btn { padding: 7px 9px; font-size: 14px; } }
+
 /* ---------- Tokens ---------- */
 :root {
   --paper: #FFF7FA;
